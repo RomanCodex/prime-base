@@ -63,11 +63,9 @@ function App() {
     // Function to fetch all loans
     const fetchLoans = async () => {
         try {
-            const response = await fetch("https://webliststudio.ng/loan/api/prod/admin/loan/fetch-all-loan", fetchrequestOptions)
-            .then((response) => response.text())
-            .then((result) => console.log(result))
-            .catch((error) => console.error(error));
+            const response = await fetch("https://webliststudio.ng/loan/api/prod/admin/loan/fetch-all-loan", fetchrequestOptions);
             const data = await response.json();
+            console.log(data);
             setLoans(data);
         } catch (error) {
             console.error('Error fetching loans:', error);
@@ -81,7 +79,7 @@ function App() {
             const data = await response.json();
             console.log(data.data[0]);
             setLoanDetails(data.data[0]);
-            // setRepayment(data.data[0].repayment_schedule);
+            setRepayment(data.data[0].repayment_schedule);
         } catch (error) {
             console.error('Error fetching loan details:', error);
         }
@@ -127,6 +125,18 @@ function App() {
                             <p>Status: {loanDetails.status_name}</p>
                             <p>Mobile Number: {loanDetails.mobile_no}</p>
                             <p>Email: {loanDetails.email_address}</p>
+                            <ul>
+                                {loanRepayment.map(loan => (
+                                    <li key={loan.sn}>
+                                        Loan Interest: {loan.loan_interest}<br/>
+                                        Month: {loan.month}<br/>
+                                        Total Due this month: {loan.monthly_repayment}<br/>
+                                        Due Date: {loan.repayment_due_date}<br/>
+                                        Loan Balance after payment: {loan.loan_balance}
+                                    </li>
+                                ))}
+                            </ul>
+                            <p>Total Loan Repayment: {loanDetails.total_loan_repayment}</p>
                         </div>
                     )}
                 </div>

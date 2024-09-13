@@ -56,6 +56,12 @@ h2 {
   margin-bottom: 20px;
 }
 
+li {
+  list-style-type: none;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
 .button {
   display: inline-block;
   margin: 10px 0;
