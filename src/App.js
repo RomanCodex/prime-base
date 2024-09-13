@@ -43,22 +43,18 @@ const fetchrequestOptions = {
 
 function App() {
     // State variables
-    const [loanAmount, setLoanAmount] = useState('');
-    const [loanDuration, setLoanDuration] = useState('');
-    const [loanId, setLoanId] = useState('');
     const [loans, setLoans] = useState([]);
     const [loanDetails, setLoanDetails] = useState(null);
+    const [loanRepayment, setRepayment] = useState([]);
 
     // Function to handle loan request
     const requestLoan = async () => {
         try {
             const response = await fetch("https://webliststudio.ng/loan/api/prod/admin/loan/add-loan", requestOptions)
-            .then((response) => response.text())
-            .then((result) => console.log(result))
-            .catch((error) => console.error(error));
-            // const data = await response.json();
+            .then((response) => response.text());
+            const data = await response.text();
             alert('Loan requested successfully!');
-            // console.log(data);
+            console.log(data);
         } catch (error) {
             console.error('Error requesting loan:', error);
         }
@@ -81,12 +77,11 @@ function App() {
     // Function to check loan details
     const checkLoanDetails = async () => {
         try {
-            const response = await fetch("https://webliststudio.ng/loan/api/prod/admin/loan/fetch-single-loan", singlerequestOptions)
-            .then((response) => response.text())
-            .then((result) => console.log(result))
-            .catch((error) => console.error(error));
+            const response = await fetch("https://webliststudio.ng/loan/api/prod/admin/loan/fetch-single-loan", singlerequestOptions);
             const data = await response.json();
-            setLoanDetails(data);
+            console.log(data.data[0]);
+            setLoanDetails(data.data[0]);
+            // setRepayment(data.data[0].repayment_schedule);
         } catch (error) {
             console.error('Error fetching loan details:', error);
         }
@@ -102,12 +97,6 @@ function App() {
             <div className="container">
                 <h2>Request a Loan</h2>
                 <div>
-                    <label>Loan Amount:</label><br />
-                    <input type="number" value={loanAmount} onChange={e => setLoanAmount(e.target.value)} /><br /><br />
-
-                    <label>Loan Duration (months):</label><br />
-                    <input type="number" value={loanDuration} onChange={e => setLoanDuration(e.target.value)} /><br /><br />
-
                     <button onClick={requestLoan} className="button">Request Loan</button>
                 </div>
 
@@ -127,17 +116,17 @@ function App() {
 
                 <h2>Check Loan Details</h2>
                 <div>
-                    <label>Loan ID:</label><br />
-                    <input type="text" value={loanId} onChange={e => setLoanId(e.target.value)} /><br /><br />
                     <button onClick={checkLoanDetails} className="button">Check Details</button>
                 </div>
                 <div className="result">
                     {loanDetails && (
                         <div>
-                            <p>Loan ID: {loanDetails.id}</p>
-                            <p>Amount: {loanDetails.amount}</p>
-                            <p>Status: {loanDetails.status}</p>
-                            <p>Duration: {loanDetails.duration}</p>
+                            <p>Name: {loanDetails.full_name}</p>
+                            <p>Loan ID: {loanDetails.loan_id}</p>
+                            <p>Loan Amount: {loanDetails.loan_amount}</p>
+                            <p>Status: {loanDetails.status_name}</p>
+                            <p>Mobile Number: {loanDetails.mobile_no}</p>
+                            <p>Email: {loanDetails.email_address}</p>
                         </div>
                     )}
                 </div>
