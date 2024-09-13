@@ -65,8 +65,7 @@ function App() {
         try {
             const response = await fetch("https://webliststudio.ng/loan/api/prod/admin/loan/fetch-all-loan", fetchrequestOptions);
             const data = await response.json();
-            console.log(data);
-            setLoans(data);
+            setLoans(data.data);
         } catch (error) {
             console.error('Error fetching loans:', error);
         }
@@ -104,8 +103,11 @@ function App() {
                     {loans.length > 0 && (
                         <ul>
                             {loans.map(loan => (
-                                <li key={loan.id}>
-                                    Loan ID: {loan.id}, Amount: {loan.amount}, Status: {loan.status}
+                                <li key={loan.sn}>
+                                    Name: {loan.full_name}<br/>
+                                    Loan ID: {loan.loan_id}<br/>
+                                    Amount: {loan.loan_amount}<br/>
+                                    Status: {loan.status_name}<br/>
                                 </li>
                             ))}
                         </ul>
